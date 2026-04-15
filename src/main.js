@@ -1,6 +1,41 @@
 import wubiData from 'wubi-code-data'
 const getWubi = ch => wubiData['取码'](ch, '86') || null
 
+// ── Dictionary (lazy-loaded on first use) ────────────────────────────────────
+let dictData = null
+let dictLoading = false
+let dictCallbacks = []
+
+async function loadDict() {
+  if (dictData) return dictData
+  if (dictLoading) return new Promise(r => dictCallbacks.push(r))
+  dictLoading = true
+  const base = import.meta.env.BASE_URL
+  const res = await fetch(`${base}dict/cedict.json`)
+  dictData = await res.json()
+  dictLoading = false
+  dictCallbacks.forEach(r => r(dictData))
+  dictCallbacks = []
+  return dictData
+}
+
+// Given a sentence and a clicked character index, find the longest dictionary
+// match that contains that character (tries start positions from i back to i-3).
+async function lookupAt(sentence, clickedIndex) {
+  const dict = await loadDict()
+  const chars = [...sentence]
+  const maxLen = 4
+
+  for (let start = Math.max(0, clickedIndex - (maxLen - 1)); start <= clickedIndex; start++) {
+    for (let len = Math.min(maxLen, chars.length - start); len >= 1; len--) {
+      if (start + len - 1 < clickedIndex) continue  // doesn't cover clicked char
+      const word = chars.slice(start, start + len).join('')
+      if (dict[word]) return { word, entries: dict[word] }
+    }
+  }
+  return null
+}
+
 // ── State ─────────────────────────────────────────────────────────────────────
 const state = {
   stories: [],       // loaded from index.json
@@ -25,6 +60,7 @@ const lineCounter   = $('line-counter')
 const completeView  = $('complete-view')
 const restartBtn    = $('restart-btn')
 const homeBtn       = $('home-btn')
+const dictPanel     = $('dict-panel')
 
 // ── Navigation ────────────────────────────────────────────────────────────────
 function showView(name) {
@@ -128,17 +164,24 @@ function renderLine(index) {
     wrapper.appendChild(label)
     wrapper.appendChild(charSpan)
     wrapper.addEventListener('click', () => {
+      // Toggle wubi code
       label.textContent = label.textContent ? '' : (getWubi(ch) ?? '')
+      // Show dictionary entry for the clicked position
+      const charIndex = [...state.current.lines[state.lineIndex]].indexOf(ch, 0)
+      const clickedIndex = [...targetLine.querySelectorAll('.char-wrapper')].indexOf(wrapper)
+      showDictEntry(state.current.lines[state.lineIndex], clickedIndex)
     })
     targetLine.appendChild(wrapper)
   }
 
-  // Reset input and feedback
+  // Reset input, feedback, and dict panel
   practiceInput.value = ''
   practiceInput.placeholder = '在这里输入…'
   feedbackMsg.textContent = ''
   feedbackMsg.className = ''
   practiceArea.classList.remove('flash-correct', 'shake')
+  dictPanel.hidden = true
+  dictPanel.innerHTML = ''
 
   // Update progress
   const total = lines.length
@@ -288,6 +331,29 @@ function onWrong(target) {
   setTimeout(() => {
     practiceInput.disabled = false
   }, 400)
+}
+
+// ── Dictionary panel ──────────────────────────────────────────────────────────
+async function showDictEntry(sentence, clickedIndex) {
+  dictPanel.hidden = false
+  dictPanel.innerHTML = '<span class="dict-loading">…</span>'
+
+  // Kick off dict load in background so it's warm for next click
+  loadDict()
+
+  const result = await lookupAt(sentence, clickedIndex)
+  if (!result) {
+    dictPanel.innerHTML = '<span class="dict-none">No entry found</span>'
+    return
+  }
+
+  const { word, entries } = result
+  const parts = [`<span class="dict-word">${escapeHtml(word)}</span>`]
+  for (const { p, e } of entries) {
+    const defs = e.map(d => escapeHtml(d)).join('; ')
+    parts.push(`<span class="dict-entry"><span class="dict-pinyin">${escapeHtml(p)}</span><span class="dict-defs">${defs}</span></span>`)
+  }
+  dictPanel.innerHTML = parts.join('')
 }
 
 // ── Completion ────────────────────────────────────────────────────────────────

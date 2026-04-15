@@ -8,7 +8,20 @@ export default defineConfig({
       registerType: 'autoUpdate',
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,ico,txt,json}'],
+        // dict/ is too large (~9 MB) to precache; use lazy runtime caching instead
+        globIgnores: ['**/dict/**'],
         runtimeCaching: [
+          {
+            urlPattern: /\/hsk-writer\/dict\/.*/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'dict-cache',
+              expiration: {
+                maxEntries: 5,
+                maxAgeSeconds: 60 * 60 * 24 * 365,
+              },
+            },
+          },
           {
             urlPattern: /\/hsk-writer\/stories\/.*/,
             handler: 'CacheFirst',
