@@ -194,7 +194,7 @@ section.active {
 #line-counter {
   color: var(--muted);
   font-size: 0.82rem;
-  margin-bottom: 3.5rem;
+  margin-bottom: 1.5rem;
   align-self: flex-end;
   max-width: 640px;
   width: 100%;
@@ -316,7 +316,7 @@ section.active {
 
 /* ── Dictionary panel ──────────────────────────────────── */
 #dict-panel {
-  margin-top: 1.75rem;
+  margin-bottom: 1.5rem;
   padding: 0.85rem 1.1rem;
   background: var(--surface);
   border: 1px solid var(--border);
@@ -427,5 +427,5 @@ section.active {
 @media (max-width: 480px) {
   header h1 { font-size: 1rem; }
   :root { --practice-size: 1.75rem; }
-  #line-counter { margin-bottom: 2.5rem; }
+  #line-counter { margin-bottom: 1rem; }
 }

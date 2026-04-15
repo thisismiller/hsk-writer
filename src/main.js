@@ -344,7 +344,6 @@ function onWrong(target) {
 async function showDictEntry(sentence, clickedIndex) {
   dictPanel.hidden = false
   dictPanel.innerHTML = '<span class="dict-loading">…</span>'
-  dictPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
 
   try {
     const result = await lookupAt(sentence, clickedIndex)
