@@ -31,8 +31,9 @@ for (const [word, pinyinMap] of Object.entries(simplified)) {
     for (const idx of baseIndices) {
       const row = all[idx]
       if (!row) continue
-      // row: [traditional, simplified, pinyin, english, classifiers, variant_of]
-      if (row[5] && row[5].length > 0) continue  // skip variants
+      // row: [traditional, simplified, pinyin, english, variant_of[], classifier_indices[]]
+      // row[4] = variant_of indices — non-empty means this entry is a variant of another word
+      if (row[4] && row[4].length > 0) continue
       const english = typeof row[3] === 'string' ? [row[3]] : row[3]
       if (!english || english.length === 0) continue
       entries.push({ p: row[2], e: english.slice(0, 3) })

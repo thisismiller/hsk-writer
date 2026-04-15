@@ -10,13 +10,20 @@ async function loadDict() {
   if (dictData) return dictData
   if (dictLoading) return new Promise(r => dictCallbacks.push(r))
   dictLoading = true
-  const base = import.meta.env.BASE_URL
-  const res = await fetch(`${base}dict/cedict.json`)
-  dictData = await res.json()
-  dictLoading = false
-  dictCallbacks.forEach(r => r(dictData))
-  dictCallbacks = []
-  return dictData
+  try {
+    const base = import.meta.env.BASE_URL
+    const res = await fetch(`${base}dict/cedict.json`)
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    dictData = await res.json()
+    dictCallbacks.forEach(r => r(dictData))
+    dictCallbacks = []
+    return dictData
+  } catch (e) {
+    dictLoading = false          // allow retry on next click
+    dictCallbacks.forEach(r => r(null))
+    dictCallbacks = []
+    throw e
+  }
 }
 
 // Given a sentence and a clicked character index, find the longest dictionary
@@ -337,23 +344,25 @@ function onWrong(target) {
 async function showDictEntry(sentence, clickedIndex) {
   dictPanel.hidden = false
   dictPanel.innerHTML = '<span class="dict-loading">…</span>'
+  dictPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
 
-  // Kick off dict load in background so it's warm for next click
-  loadDict()
+  try {
+    const result = await lookupAt(sentence, clickedIndex)
+    if (!result) {
+      dictPanel.innerHTML = '<span class="dict-none">No entry found</span>'
+      return
+    }
 
-  const result = await lookupAt(sentence, clickedIndex)
-  if (!result) {
-    dictPanel.innerHTML = '<span class="dict-none">No entry found</span>'
-    return
+    const { word, entries } = result
+    const parts = [`<span class="dict-word">${escapeHtml(word)}</span>`]
+    for (const { p, e } of entries) {
+      const defs = e.map(d => escapeHtml(d)).join('; ')
+      parts.push(`<span class="dict-entry"><span class="dict-pinyin">${escapeHtml(p)}</span><span class="dict-defs">${defs}</span></span>`)
+    }
+    dictPanel.innerHTML = parts.join('')
+  } catch (e) {
+    dictPanel.innerHTML = '<span class="dict-none">Could not load dictionary</span>'
   }
-
-  const { word, entries } = result
-  const parts = [`<span class="dict-word">${escapeHtml(word)}</span>`]
-  for (const { p, e } of entries) {
-    const defs = e.map(d => escapeHtml(d)).join('; ')
-    parts.push(`<span class="dict-entry"><span class="dict-pinyin">${escapeHtml(p)}</span><span class="dict-defs">${defs}</span></span>`)
-  }
-  dictPanel.innerHTML = parts.join('')
 }
 
 // ── Completion ────────────────────────────────────────────────────────────────
