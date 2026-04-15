@@ -211,35 +211,46 @@ section.active {
 }
 
 /*
- * Target line — one <span> per character.
- * The input below shares the exact same font metrics so
- * each typed character aligns under its target character.
+ * Target line — flex row of .char-wrapper elements.
+ * align-items: flex-end keeps all characters on the same baseline
+ * even when wubi labels above them vary in visibility.
  */
 #target-line {
   font-size: var(--practice-size);
   font-family: var(--font);
-  letter-spacing: var(--practice-letter);
   line-height: 1.5;
-  white-space: nowrap;
   user-select: none;
-  text-align: center;
-  min-height: 1.5em;
-  /* Characters colored by JS via span classes */
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: var(--practice-letter);
 }
 
+/* Each character + its wubi label stacked vertically */
+.char-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+.char-wrapper:hover .char { opacity: 0.7; }
+
+/* Wubi code label — fixed height so the layout never shifts */
+.wubi-label {
+  font-family: 'Courier New', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--red);
+  letter-spacing: 0;
+  height: 1.1em;
+  line-height: 1.1;
+  text-transform: lowercase;
+}
+
+/* Character states set by JS */
 #target-line .char-pending { color: var(--text); }
 #target-line .char-correct { color: var(--correct); }
 #target-line .char-wrong   { color: var(--wrong); text-decoration: underline wavy; }
-
-/* Separator line between target and input */
-#target-line::after {
-  content: '';
-  display: block;
-  height: 2px;
-  background: var(--border);
-  margin-top: 0.35rem;
-  border-radius: 1px;
-}
 
 /*
  * Input — same font metrics as target so characters line up.

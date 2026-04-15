@@ -1,3 +1,6 @@
+import wubiData from 'wubi-code-data'
+const getWubi = ch => wubiData['取码'](ch, '86') || null
+
 // ── State ─────────────────────────────────────────────────────────────────────
 const state = {
   stories: [],       // loaded from index.json
@@ -109,13 +112,25 @@ function renderLine(index) {
   const { lines } = state.current
   const line = lines[index]
 
-  // Build target spans — one per character
+  // Build target — one .char-wrapper per character, with a wubi label above
   targetLine.innerHTML = ''
   for (const ch of line) {
-    const span = document.createElement('span')
-    span.className = 'char-pending'
-    span.textContent = ch
-    targetLine.appendChild(span)
+    const wrapper = document.createElement('span')
+    wrapper.className = 'char-wrapper'
+
+    const label = document.createElement('span')
+    label.className = 'wubi-label'
+
+    const charSpan = document.createElement('span')
+    charSpan.className = 'char char-pending'
+    charSpan.textContent = ch
+
+    wrapper.appendChild(label)
+    wrapper.appendChild(charSpan)
+    wrapper.addEventListener('click', () => {
+      label.textContent = label.textContent ? '' : (getWubi(ch) ?? '')
+    })
+    targetLine.appendChild(wrapper)
   }
 
   // Reset input and feedback
@@ -175,19 +190,22 @@ function checkInput() {
   if (!state.current) return
   const typed = practiceInput.value
   const target = state.current.lines[state.lineIndex]
-  const spans = targetLine.querySelectorAll('span')
+  const spans = targetLine.querySelectorAll('.char')
 
   let allCorrect = true
 
   for (let i = 0; i < target.length; i++) {
     const span = spans[i]
     if (i >= typed.length) {
-      span.className = 'char-pending'
+      span.classList.remove('char-correct', 'char-wrong')
+      span.classList.add('char-pending')
       allCorrect = false
     } else if (typed[i] === target[i]) {
-      span.className = 'char-correct'
+      span.classList.remove('char-pending', 'char-wrong')
+      span.classList.add('char-correct')
     } else {
-      span.className = 'char-wrong'
+      span.classList.remove('char-pending', 'char-correct')
+      span.classList.add('char-wrong')
       allCorrect = false
     }
   }
@@ -201,8 +219,10 @@ function checkInput() {
 }
 
 function resetCharColors() {
-  const spans = targetLine.querySelectorAll('span')
-  spans.forEach(s => (s.className = 'char-pending'))
+  targetLine.querySelectorAll('.char').forEach(s => {
+    s.classList.remove('char-correct', 'char-wrong')
+    s.classList.add('char-pending')
+  })
 }
 
 function onCorrect() {
