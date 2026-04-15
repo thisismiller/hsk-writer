@@ -49,6 +49,7 @@ const state = {
   current: null,     // { meta, lines: string[] }
   lineIndex: 0,
   isComposing: false,
+  isTransitioning: false,
 }
 
 // ── DOM refs ──────────────────────────────────────────────────────────────────
@@ -279,6 +280,7 @@ function buildCharMap(target, typed) {
 
 function checkInput() {
   if (!state.current) return
+  if (state.isTransitioning) return
   const typed = practiceInput.value
   const target = state.current.lines[state.lineIndex]
   const spans = targetLine.querySelectorAll('.char')
@@ -306,7 +308,7 @@ function resetCharColors() {
 }
 
 function onCorrect() {
-  practiceInput.disabled = true
+  state.isTransitioning = true
 
   // Flash
   void practiceArea.offsetWidth // force reflow to restart animation
@@ -316,7 +318,7 @@ function onCorrect() {
   feedbackMsg.className = 'correct'
 
   setTimeout(() => {
-    practiceInput.disabled = false
+    state.isTransitioning = false
     state.lineIndex++
     if (state.lineIndex >= state.current.lines.length) {
       showComplete()
@@ -327,7 +329,7 @@ function onCorrect() {
 }
 
 function onWrong(target) {
-  practiceInput.disabled = true
+  state.isTransitioning = true
 
   void practiceArea.offsetWidth
   practiceArea.classList.add('shake')
@@ -336,7 +338,7 @@ function onWrong(target) {
   feedbackMsg.className = 'wrong'
 
   setTimeout(() => {
-    practiceInput.disabled = false
+    state.isTransitioning = false
   }, 400)
 }
 
