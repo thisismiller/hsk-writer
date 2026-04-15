@@ -6,5 +6,37 @@
     "level": "HSK 1",
     "file": "01-greetings.txt",
     "description": "Basic greetings and self-introduction"
+  },
+  {
+    "id": "02-morning",
+    "title": "小明的早上",
+    "titleEn": "Xiao Ming's Morning",
+    "level": "HSK 1",
+    "file": "02-morning.txt",
+    "description": "A boy's morning routine before school"
+  },
+  {
+    "id": "03-dog",
+    "title": "小狗多多",
+    "titleEn": "Duo Duo the Dog",
+    "level": "HSK 1",
+    "file": "03-dog.txt",
+    "description": "A little white dog and his best friend"
+  },
+  {
+    "id": "04-rain",
+    "title": "下雨天",
+    "titleEn": "Rainy Day",
+    "level": "HSK 1",
+    "file": "04-rain.txt",
+    "description": "Everyone is home when it rains"
+  },
+  {
+    "id": "05-store",
+    "title": "去商店",
+    "titleEn": "At the Store",
+    "level": "HSK 1",
+    "file": "05-store.txt",
+    "description": "A shopping trip with mum"
   }
 ]
