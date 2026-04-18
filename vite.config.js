@@ -63,9 +63,9 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'HSK Writer · 汉字练习',
-        short_name: 'HSK Writer',
-        description: 'Practice reading and writing Chinese by typing HSK stories',
+        name: 'Wubi Writer · 汉字练习',
+        short_name: 'Wubi Writer',
+        description: 'Practice reading and writing Chinese by typing stories using Wubi input',
         theme_color: '#c0392b',
         background_color: '#faf8f5',
         display: 'standalone',

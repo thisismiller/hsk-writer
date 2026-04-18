@@ -1,4 +1,4 @@
-# HSK Writer · 汉字练习
+# Wubi Writer · 汉字练习
 
 A Progressive Web App for practising Chinese reading and writing. Select a story, then type each sentence line-by-line — your input is aligned directly beneath the target so every character lands in place.
 
@@ -8,7 +8,7 @@ A Progressive Web App for practising Chinese reading and writing. Select a story
 - **Character-by-character feedback** — correct characters turn green, wrong ones red, as you type
 - **Chinese IME support** — composition events are guarded so pinyin input works correctly
 - **Offline-first PWA** — installable, works without a network after first load
-- **HSK-1 vocabulary** — starts with a simple greetings story; easy to add more
+- **Beginner vocabulary** — starts with a simple greetings story; easy to add more
 
 ## Adding stories
 
