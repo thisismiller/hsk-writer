@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
-  base: '/hsk-writer/',
+  base: '/wubi-writer/',
   plugins: [
     VitePWA({
       registerType: 'autoUpdate',
@@ -12,7 +12,7 @@ export default defineConfig({
         globIgnores: ['**/dict/**'],
         runtimeCaching: [
           {
-            urlPattern: /\/hsk-writer\/dict\/.*/,
+            urlPattern: /\/wubi-writer\/dict\/.*/,
             handler: 'CacheFirst',
             options: {
               cacheName: 'dict-cache',
@@ -23,7 +23,7 @@ export default defineConfig({
             },
           },
           {
-            urlPattern: /\/hsk-writer\/stories\/.*/,
+            urlPattern: /\/wubi-writer\/stories\/.*/,
             handler: 'CacheFirst',
             options: {
               cacheName: 'stories-cache',
@@ -69,17 +69,17 @@ export default defineConfig({
         theme_color: '#c0392b',
         background_color: '#faf8f5',
         display: 'standalone',
-        start_url: '/hsk-writer/',
-        scope: '/hsk-writer/',
+        start_url: '/wubi-writer/',
+        scope: '/wubi-writer/',
         icons: [
           {
-            src: '/hsk-writer/icons/icon.svg',
+            src: '/wubi-writer/icons/icon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'any',
           },
           {
-            src: '/hsk-writer/icons/icon.svg',
+            src: '/wubi-writer/icons/icon.svg',
             sizes: 'any',
             type: 'image/svg+xml',
             purpose: 'maskable',

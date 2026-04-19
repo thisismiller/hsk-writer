@@ -29,7 +29,7 @@ Drop a `.txt` file in `public/stories/` (one sentence per line) and add an entry
 
 ```bash
 npm install
-npm run dev      # dev server at localhost:5173/hsk-writer/
+npm run dev      # dev server at localhost:5173/wubi-writer/
 npm run build    # production build → dist/
 npm run preview  # preview the production build locally
 ```
@@ -40,4 +40,4 @@ Pushes to `main` trigger a GitHub Actions workflow that builds the app and deplo
 
 To enable deployment, go to **Settings → Pages → Source** and select **GitHub Actions**.
 
-The live app is served at `https://thisismiller.github.io/hsk-writer/`.
+The live app is served at `https://thisismiller.github.io/wubi-writer/`.
