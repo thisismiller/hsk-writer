@@ -70,8 +70,9 @@ async function lookupAt(sentence, clickedIndex) {
 
 // ── State ─────────────────────────────────────────────────────────────────────
 const state = {
-  stories: [],       // loaded from index.json
-  current: null,     // { meta, lines: string[] }
+  categories: [],        // loaded from index.json
+  currentCategory: null, // selected category object
+  current: null,         // { meta, lines: string[] }
   lineIndex: 0,
   isComposing: false,
   isTransitioning: false,
@@ -81,6 +82,7 @@ const state = {
 const $ = id => document.getElementById(id)
 
 const backBtn       = $('back-btn')
+const introText     = $('intro-text')
 const storyListView = $('story-list-view')
 const storyCards    = $('story-cards')
 const practiceView  = $('practice-view')
@@ -103,7 +105,7 @@ function showView(name) {
 
   if (name === 'list') {
     storyListView.classList.add('active')
-    backBtn.classList.remove('visible')
+    backBtn.classList.toggle('visible', state.currentCategory !== null)
   } else if (name === 'practice') {
     practiceView.classList.add('active')
     backBtn.classList.add('visible')
@@ -118,7 +120,7 @@ async function init() {
   const base = import.meta.env.BASE_URL
   try {
     const res = await fetch(`${base}stories/index.json`)
-    state.stories = await res.json()
+    state.categories = await res.json()
   } catch (e) {
     storyCards.innerHTML = '<p style="color:var(--wrong)">无法加载故事列表。请检查网络连接。</p>'
     return
@@ -130,7 +132,39 @@ async function init() {
 
 function renderStoryList() {
   storyCards.innerHTML = ''
-  for (const meta of state.stories) {
+
+  if (!state.currentCategory) {
+    introText.innerHTML = '选一个类别。<br><span class="intro-en">Choose a category.</span>'
+    for (const cat of state.categories) {
+      const card = document.createElement('div')
+      card.className = 'story-card'
+      card.tabIndex = 0
+      card.setAttribute('role', 'button')
+      card.setAttribute('aria-label', `${cat.title} — ${cat.titleEn}`)
+      card.innerHTML = `
+        <div class="story-card-icon">${cat.icon}</div>
+        <div class="story-card-body">
+          <h2>${cat.title} · ${cat.titleEn}</h2>
+          <p class="meta">${escapeHtml(cat.description)}</p>
+        </div>
+      `
+      card.addEventListener('click', () => selectCategory(cat))
+      card.addEventListener('keydown', e => {
+        if (e.key === 'Enter' || e.key === ' ') selectCategory(cat)
+      })
+      storyCards.appendChild(card)
+    }
+    return
+  }
+
+  introText.innerHTML = '选一个故事开始练习。<br><span class="intro-en">Choose a story to start practising.</span>'
+
+  if (state.currentCategory.stories.length === 0) {
+    storyCards.innerHTML = '<p style="color:var(--muted);text-align:center;padding:2rem 0">Coming soon · 敬请期待</p>'
+    return
+  }
+
+  for (const meta of state.currentCategory.stories) {
     const card = document.createElement('div')
     card.className = 'story-card'
     card.tabIndex = 0
@@ -152,6 +186,12 @@ function renderStoryList() {
     })
     storyCards.appendChild(card)
   }
+}
+
+function selectCategory(cat) {
+  state.currentCategory = cat
+  renderStoryList()
+  showView('list')
 }
 
 // ── Story practice ────────────────────────────────────────────────────────────
@@ -461,12 +501,20 @@ restartBtn.addEventListener('click', () => {
 homeBtn.addEventListener('click', () => {
   state.current = null
   state.lineIndex = 0
+  renderStoryList()
   showView('list')
 })
 
 backBtn.addEventListener('click', () => {
-  state.current = null
-  state.lineIndex = 0
+  if (state.current) {
+    // Practice/complete → back to story list within current category
+    state.current = null
+    state.lineIndex = 0
+  } else {
+    // Story list → back to category list
+    state.currentCategory = null
+  }
+  renderStoryList()
   showView('list')
 })
 

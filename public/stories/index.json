@@ -1,58 +1,84 @@
 [
   {
-    "id": "01-greetings",
-    "title": "问好",
-    "titleEn": "Greetings",
-    "level": "HSK 1",
-    "file": "01-greetings.txt",
-    "description": "Basic greetings and self-introduction"
+    "id": "stories",
+    "icon": "📖",
+    "title": "故事",
+    "titleEn": "Stories",
+    "description": "Short children's stories for reading and writing practice",
+    "stories": [
+      {
+        "id": "01-greetings",
+        "title": "问好",
+        "titleEn": "Greetings",
+        "level": "HSK 1",
+        "file": "01-greetings.txt",
+        "description": "Basic greetings and self-introduction"
+      },
+      {
+        "id": "02-morning",
+        "title": "小明的早上",
+        "titleEn": "Xiao Ming's Morning",
+        "level": "HSK 1",
+        "file": "02-morning.txt",
+        "description": "A boy's morning routine before school"
+      },
+      {
+        "id": "03-dog",
+        "title": "小狗多多",
+        "titleEn": "Duo Duo the Dog",
+        "level": "HSK 1",
+        "file": "03-dog.txt",
+        "description": "A little white dog and his best friend"
+      },
+      {
+        "id": "04-rain",
+        "title": "下雨天",
+        "titleEn": "Rainy Day",
+        "level": "HSK 1",
+        "file": "04-rain.txt",
+        "description": "Everyone is home when it rains"
+      },
+      {
+        "id": "05-store",
+        "title": "去商店",
+        "titleEn": "At the Store",
+        "level": "HSK 1",
+        "file": "05-store.txt",
+        "description": "A shopping trip with mum"
+      }
+    ]
   },
   {
-    "id": "02-morning",
-    "title": "小明的早上",
-    "titleEn": "Xiao Ming's Morning",
-    "level": "HSK 1",
-    "file": "02-morning.txt",
-    "description": "A boy's morning routine before school"
+    "id": "grammar",
+    "icon": "📝",
+    "title": "语法",
+    "titleEn": "Grammar",
+    "description": "Sentence patterns and grammar structures",
+    "stories": [
+      {
+        "id": "06-word-order",
+        "title": "我在学校",
+        "titleEn": "Word Order",
+        "level": "HSK 1",
+        "file": "06-word-order.txt",
+        "description": "Sentences with time, place, manner, instrument, target, and duration"
+      },
+      {
+        "id": "07-questions",
+        "title": "问问题",
+        "titleEn": "Questions",
+        "level": "HSK 1",
+        "file": "07-questions.txt",
+        "description": "Question words: 谁、什么时候、怎么、在哪儿、用什么、给谁、做什么、多久"
+      }
+    ]
   },
   {
-    "id": "03-dog",
-    "title": "小狗多多",
-    "titleEn": "Duo Duo the Dog",
-    "level": "HSK 1",
-    "file": "03-dog.txt",
-    "description": "A little white dog and his best friend"
-  },
-  {
-    "id": "04-rain",
-    "title": "下雨天",
-    "titleEn": "Rainy Day",
-    "level": "HSK 1",
-    "file": "04-rain.txt",
-    "description": "Everyone is home when it rains"
-  },
-  {
-    "id": "05-store",
-    "title": "去商店",
-    "titleEn": "At the Store",
-    "level": "HSK 1",
-    "file": "05-store.txt",
-    "description": "A shopping trip with mum"
-  },
-  {
-    "id": "06-word-order",
-    "title": "我在学校",
-    "titleEn": "Word Order",
-    "level": "HSK 1",
-    "file": "06-word-order.txt",
-    "description": "Sentences with time, place, manner, instrument, target, and duration"
-  },
-  {
-    "id": "07-questions",
-    "title": "问问题",
-    "titleEn": "Questions",
-    "level": "HSK 1",
-    "file": "07-questions.txt",
-    "description": "Question words: 谁、什么时候、怎么、在哪儿、用什么、给谁、做什么、多久"
+    "id": "technical",
+    "icon": "💻",
+    "title": "技术",
+    "titleEn": "Technical",
+    "description": "Computer science vocabulary and phrases",
+    "stories": []
   }
 ]
