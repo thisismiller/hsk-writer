@@ -247,8 +247,13 @@ function renderLine(index) {
     targetLine.appendChild(wrapper)
   }
 
-  // Reset input, feedback, and dict panel
-  practiceInput.value = ''
+  // Reset input, feedback, and dict panel; pre-fill any leading punctuation
+  let leadingPunct = ''
+  for (const ch of line) {
+    if (!isPunct(ch)) break
+    leadingPunct += ch
+  }
+  practiceInput.value = leadingPunct
   practiceInput.placeholder = '在这里输入…'
   feedbackMsg.textContent = ''
   feedbackMsg.className = ''
@@ -261,6 +266,9 @@ function renderLine(index) {
   const pct = (index / total) * 100
   progressBar.style.width = `${pct}%`
   lineCounter.textContent = `${index + 1} / ${total}`
+
+  // If leading punct was pre-filled, mark those chars correct immediately
+  if (leadingPunct) checkInput()
 
   // Sync input width to target width after paint
   requestAnimationFrame(() => {
@@ -307,6 +315,12 @@ const PUNCT = new Set('！？。，、；：\u201C\u201D\u2018\u2019（）【】
 
 function isPunct(ch) {
   return PUNCT.has(ch)
+}
+
+// Normalize any Unicode quote variant to the ASCII quote used in stories
+const QUOTE_NORMALIZE = { '“': '"', '”': '"', '‘': "'", '’': "'" }
+function normalizeQuotes(s) {
+  return s.replace(/[“”‘’]/g, ch => QUOTE_NORMALIZE[ch])
 }
 
 // Return the canonical input value: auto-insert punctuation from target at
@@ -371,6 +385,10 @@ function checkInput() {
   if (state.isTransitioning) return
   const target = state.current.lines[state.lineIndex]
   const spans = targetLine.querySelectorAll('.char')
+
+  // Normalize Unicode quote variants to ASCII so they match story text
+  const normalized = normalizeQuotes(practiceInput.value)
+  if (normalized !== practiceInput.value) practiceInput.value = normalized
 
   // Auto-insert punctuation so the input stays visually aligned with the target
   const canonical = withAutoInsertedPunct(target, practiceInput.value)
