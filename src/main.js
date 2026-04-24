@@ -282,7 +282,7 @@ function renderLine(index) {
   } else {
     englishHint.hidden = true
   }
-  targetLine.classList.toggle('invisible', state.mode === 'english')
+  targetLine.classList.toggle('english-mode', state.mode === 'english')
 
   // Update progress
   const total = lines.length

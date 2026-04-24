@@ -292,7 +292,8 @@ section.active {
   align-items: flex-end;
   gap: var(--practice-letter);
 }
-#target-line.invisible { visibility: hidden; }
+/* In English mode, characters are hidden until typed */
+#target-line.english-mode .char-pending { visibility: hidden; }
 
 /* Each character + its wubi label stacked vertically */
 .char-wrapper {
