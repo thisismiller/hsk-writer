@@ -79,6 +79,15 @@
     "title": "技术",
     "titleEn": "Technical",
     "description": "Computer science vocabulary and phrases",
-    "stories": []
+    "stories": [
+      {
+        "id": "08-oceanbase",
+        "title": "OceanBase",
+        "titleEn": "OceanBase",
+        "level": "技术词汇",
+        "file": "08-oceanbase.txt",
+        "description": "Distributed database concepts: replication, consensus, ACID, LSM-tree, multi-tenancy, and secure computation"
+      }
+    ]
   }
 ]

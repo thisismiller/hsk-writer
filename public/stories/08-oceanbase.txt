@@ -1,0 +1,63 @@
+小王是一名数据库工程师。
+公司数据量很大，并发很高。
+传统集中式数据库难以水平伸缩。
+OceanBase是分布式关系数据库。
+集群由多个可用区（Zone）组成。
+每个Zone有若干OBServer节点。
+用户通过OBProxy代理访问数据库。
+数据分区存储，每个分区有三个副本。
+副本通过Paxos协议同步事务日志。
+多数副本确认后，事务提交成功。
+即使Zone故障，系统也能自动恢复。
+这实现了RPO为零和高可用目标。
+事务需要满足ACID属性。
+原子性保证事务要么全部成功，要么全部回滚。
+分布式事务使用两阶段提交协议。
+全局时间戳服务为每个事务分配版本号。
+并发控制采用多版本并发控制。
+读写操作互不阻塞，提高了系统性能。
+OceanBase使用基于LSM-tree的存储引擎。
+修改增量保存在内存，基线数据只读存于磁盘。
+数据压缩率可以达到三倍以上。
+分布式SQL优化器选择最优的查询执行计划。
+OceanBase支持集群内原生多租户设计。
+资源隔离保护每个租户的数据安全。
+它同时支持OLTP事务处理和OLAP分析查询。
+这种HTAP混合负载能力满足不同的业务需求。
+多个数据库之间可以进行多方安全计算。
+无服务器计算实现弹性资源伸缩，按需付费。
+同态加密保护各方的数据隐私。
+这解决了数据孤岛的问题。
+小王说："分布式数据库真了不起！"
+---
+Xiao Wang is a database engineer.
+The company has massive data volumes and high concurrency.
+Traditional centralized databases are hard to scale horizontally.
+OceanBase is a distributed relational database.
+Its cluster is made up of multiple availability zones (Zones).
+Each Zone contains several OBServer nodes.
+Users access the database through the OBProxy.
+Data is stored in partitions, each with three replicas.
+Replicas synchronize transaction logs via the Paxos consensus protocol.
+A transaction commits only after a majority of replicas confirm it.
+Even if a Zone fails, the system recovers automatically.
+This achieves an RPO of zero and high availability.
+Transactions must satisfy the ACID properties.
+Atomicity guarantees a transaction either fully succeeds or fully rolls back.
+Distributed transactions use the two-phase commit protocol.
+The Global Timestamp Service assigns a version number to each transaction.
+Concurrency control uses Multi-Version Concurrency Control (MVCC).
+Reads and writes do not block each other, improving system performance.
+OceanBase uses an LSM-tree-based storage engine.
+Delta changes live in memory; baseline data sits read-only on disk.
+The data compression ratio can exceed three times.
+The distributed SQL optimizer selects the best query execution plan.
+OceanBase supports native multi-tenancy within the cluster.
+Resource isolation protects each tenant's data security.
+It supports both OLTP transaction processing and OLAP analytical queries.
+This HTAP hybrid workload capability meets diverse business needs.
+Multiple databases can perform secure multi-party computation together.
+Serverless computing provides elastic resource scaling on a pay-as-you-go basis.
+Homomorphic encryption protects each party's data privacy.
+This solves the problem of data silos.
+Xiao Wang said, "Distributed databases are truly remarkable!"
